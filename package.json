@@ -1,0 +1,20 @@
+{
+  "name": "machineto",
+  "version": "0.0.1",
+  "description": "Minimal (neto) implementation of a state machine in javascript",
+  "private": true,
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha ./test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha":"2.0.x",
+    "chai":"1.10.x",
+    "sinon":"1.12.x"
+  },
+  "author": "Itai Koren (@itkoren)",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.10.x"
+  }
+}
