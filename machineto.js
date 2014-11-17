@@ -1,7 +1,7 @@
 /**
  * Create a finite state machine
  * @param {String} current - initialization state for the state machine
- * @param {Object} machine - the state machine's diagram:
+ * @param {Object} machine - the state machine's flow:
  *          {
  *              "state1": {
  *                  "event1": [action1, "state2"],
@@ -42,7 +42,7 @@
 
                 // Save [action, nextState] in name for further use
                 // If name is defined
-                // name[0] or name[0][0] is the function (if a scope is given)
+                // name[0] or name[0][0] is the function (if a context is given)
                 // call the function in the context or call it directly with the params
                 // The next state is the new state and the new state is returned
                 return ((name = machine[current][name]) &&
@@ -61,8 +61,8 @@
             return Machineto;
         });
     }
-    // included directly via <script> tag
+    // Included directly via <script> tag
     else {
-        root.Machineto = Michineto;
+        root.Machineto = Machineto;
     }
 })();
