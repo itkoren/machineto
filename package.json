@@ -1,10 +1,10 @@
 {
   "name": "machineto",
-  "version": "0.0.1",
-  "description": "Minimal (neto) implementation of a state machine in javascript",
+  "version": "0.0.4",
+  "description": "Minimal (neto) implementation of a finite state machine in javascript",
   "private": true,
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha ./test"
+    "test": "node ./node_modules/mocha/bin/mocha ./tests"
   },
   "dependencies": {},
   "devDependencies": {

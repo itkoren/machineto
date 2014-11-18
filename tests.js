@@ -3,7 +3,7 @@ var expect = require("chai").expect;
 var sinon = require("sinon");
 var sandbox = sinon.sandbox.create();
 
-describe("Machineto Tests", function() {
+describe("machineto Tests", function() {
     before(function () {
         // before() is the first thing we run before all your tests.
         // Do one-time setup here.
@@ -21,10 +21,10 @@ describe("Machineto Tests", function() {
         var on = sandbox.spy();
         var off = sandbox.spy();
         var sm = new machineto("off", {
-            // When in off state, and the event is "on" we should execute the on action and go to on state.
-            "off": { "turnOn": { action: on, newState: "on" } },
+            // When in "off" state, and the event is "turnOn" we should execute the on action and go to "on" state.
+            "off": { "turnOn": { action: on, nextState: "on" } },
             // Do the opposite
-            "on": { "turnOff": { action: off, newState: "off" } }
+            "on": { "turnOff": { action: off, nextState: "off" } }
         });
 
         it("'off' and 'on' should not have been called", function () {
@@ -49,7 +49,7 @@ describe("Machineto Tests", function() {
         var args1 = { args: 1 };
         var args2 = { args: 2 };
         var sm = new machineto("state1", {
-            "state1": { "event": { action: action, newState: "state2" } },
+            "state1": { "event": { action: action, nextState: "state2" } },
             "state2": { "event": { action: action } }
         });
 
@@ -69,7 +69,7 @@ describe("Machineto Tests", function() {
         var context = { action: function () { context.ctx = this; } };
         var action = sandbox.spy(context, "action");
         var sm = new machineto("state1", {
-            "state1": {"event": { action: action, context: context, newState: "state2"} },
+            "state1": {"event": { action: action, context: context, nextState: "state2"} },
             "state2": {"event": { action: action } }
         });
 
@@ -82,7 +82,7 @@ describe("Machineto Tests", function() {
     describe("Test wrong event in state", function () {
         var action = sandbox.spy();
         var sm = new machineto("state1", {
-            "state1": {"event": { action: action, newState: "state2" } },
+            "state1": {"event": { action: action, nextState: "state2" } },
             "state2": {"event": { action: action }}
         });
 
@@ -98,11 +98,11 @@ describe("Machineto Tests", function() {
         var sm = new machineto("off", {
             "off": {
                 "setCode": { action: allow },
-                "turnOn": { action: on, newState: "on" }
+                "turnOn": { action: on, nextState: "on" }
             },
             "on": {
                 "setCode": { action: allow },
-                "turnOff": { action: off, newState: "off" }
+                "turnOff": { action: off, nextState: "off" }
             }
         });
 

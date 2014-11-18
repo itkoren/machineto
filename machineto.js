@@ -4,36 +4,27 @@
  * @param {Object} transitions - the state machine's transitions/flow:
  *          {
  *              "state1": {
- *                  "event1": { action: action1, newState: "state2" },
+ *                  "event1": { action: action1, nextState: "state2" },
  *                  "event2": { action: action2 }
  *              },
  *              "state2": {
- *                  "event3": { action: action3, context: context, newState: "state1" }
+ *                  "event3": { action: action3, context: context, nextState: "state1" }
  *              }
  *         }
  * @returns {Object}
  */
-(function () {
+(function() {
     var root = this;
 
     function Machineto(initialState, transitions) {
         var currentState;
         var transitionDiagram;
 
-        _initialize(initialState, transitions);
-
-        /**
-         * Initialize the current state and the state machine
-         * @param {String} state - the current state
-         * @param {Object} diagram - the object representation of the transitions diagram
-         * @returns {Object}
-         */
-        function _initialize(state, diagram) {
-            if ("string" === typeof state && "object" === typeof diagram) {
-                currentState = state;
-                transitionDiagram = diagram;
-            }
+        if ("string" === typeof initialState && "object" === typeof transitions) {
+            currentState = initialState;
+            transitionDiagram = transitions;
         }
+
         /**
          * Lookup for the correct event object on the current state
          * @param {String} eventName - the name of the event to lookup
@@ -59,42 +50,45 @@
             return false;
         }
         /**
-         * Update the current state to the new state
-         * @param {String} newState - the new state
+         * Update the current state to the next state
+         * @param {String} nextState - the new/next state
          * @returns {Object}
          */
-        function _updateState(newState) {
-            currentState = newState || currentState;
+        function _updateState(nextState) {
+            currentState = nextState || currentState;
+        }
+        /**
+         * Gets the current state of the state machine
+         * @returns {String}
+         */
+        function getCurrentState() {
+            return currentState;
+        }
+        /**
+         * Fire an event on the state machine
+         * @param {String} eventName - the name of the event
+         * @param {Object} params - the parameters to pass to the action
+         * @returns {Object}
+         */
+        function fire(eventName) {
+            // Lookup for the event for further use
+            var event = _lookup(eventName);
+            var params = (1 < arguments.length) ? Array.prototype.slice.call(arguments, 1) : void 0;
+
+            // Invoke the action function
+            if (event && _invoke(event, params)) {
+                // Update the current state to the next state
+                _updateState(event.nextState);
+                return true;
+            }
+
+            return false;
         }
 
+        // The "public" interface (revealing pattern)
         return {
-            /**
-             * Gets the current state of the state machine
-             * @returns {String}
-             */
-            getCurrentState: function() {
-                return currentState;
-            },
-            /**
-             * Fire an event on the state machine
-             * @param {String} eventName - the name of the event
-             * @param {Object} params - the parameters to pass to the action
-             * @returns {Object}
-             */
-            fire: function (eventName) {
-                // Lookup for the event for further use
-                var event = _lookup(eventName);
-                var params = (1 < arguments.length) ? Array.prototype.slice.call(arguments, 1) : void 0;
-
-                // Invoke the action function
-                if (event && _invoke(event, params)) {
-                    // Update the current state to the new state
-                    _updateState(event.newState);
-                    return true;
-                }
-
-                return false;
-            }
+            getCurrentState: getCurrentState,
+            fire: fire
         };
     }
 
@@ -104,7 +98,7 @@
     }
     // AMD / RequireJS
     else if ("undefined" !== typeof define && define.amd) {
-        define([], function () {
+        define([], function() {
             return Machineto;
         });
     }
