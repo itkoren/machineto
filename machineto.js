@@ -1,17 +1,14 @@
 /**
  * Create a finite state machine
- * @param {String} current - initialization state for the state machine
- * @param {Object} machine - the state machine's flow:
+ * @param {String} initialState - initialization state for the state machine
+ * @param {Object} transitions - the state machine's transitions/flow:
  *          {
  *              "state1": {
- *                  "event1": [action1, "state2"],
- *                  "event2": [action2]
+ *                  "event1": { action: action1, newState: "state2" },
+ *                  "event2": { action: action2 }
  *              },
  *              "state2": {
- *                  "event3": [
- *                      [action3, context],
- *                      "state1"
- *                  ]
+ *                  "event3": { action: action3, context: context, newState: "state1" }
  *              }
  *         }
  * @returns {Object}
@@ -19,54 +16,84 @@
 (function () {
     var root = this;
 
-    function Machineto(current, machine) {
+    function Machineto(initialState, transitions) {
+        var currentState;
+        var transitionDiagram;
+
+        _initialize(initialState, transitions);
+
+        /**
+         * Initialize the current state and the state machine
+         * @param {String} state - the current state
+         * @param {Object} transitionData - the object representation of the transitions diagram
+         * @returns {Object}
+         */
+        function _initialize(state, diagram) {
+            if ("string" === typeof state && "object" === typeof diagram) {
+                currentState = state;
+                transitionDiagram = diagram;
+            }
+        }
+        /**
+         * Lookup for the correct event object on the current state
+         * @param {String} eventName - the name of the event to lookup
+         * @returns {Object}
+         */
+        function _lookup(eventName) {
+            return transitionDiagram[currentState][eventName];
+        }
+        /**
+         * Invoke the action function of a specified event object
+         * call the function in the context or call it directly with the supplied params
+         * and return an indicator weather to set next state or not
+         * @param {Object} event - the event object representation
+         * @param {Array} params - the array of parameters to use for invoking the event action
+         * @returns {Boolean}
+         */
+        function _invoke(event, params) {
+            try {
+                event.action.apply(event.context, params);
+                return true;
+            }
+            catch(ex) {}
+            return false;
+        }
+        /**
+         * Update the current state to the new state
+         * @param {String} newState - the new state
+         * @returns {Object}
+         */
+        function _updateState(newState) {
+            currentState = newState || currentState;
+        }
+
         return {
             /**
-             * Send an event to the state machine
-             * @param {String} name - the name of the event
+             * Gets the current state of the state machine
+             * @returns {String}
+             */
+            getCurrentState: function() {
+                return currentState;
+            },
+            /**
+             * Fire an event on the state machine
+             * @param {String} eventName - the name of the event
              * @param {Object} params - the parameters to pass to the action
              * @returns {Object}
              */
-            event: function (name) {
+            fire: function (eventName) {
+                // Lookup for the event for further use
+                var event = _lookup(eventName);
                 var params = (1 < arguments.length) ? Array.prototype.slice.call(arguments, 1) : void 0;
-                /**
-                 * Save [action, nextState] in name for further use and return name
-                 * @returns {Array}
-                 */
-                function _assign() {
-                    name = machine[current][name];
-                    return name;
+
+                // Invoke the action function
+                if (event && _invoke(event, params)) {
+                    // Update the current state to the new state
+                    _updateState(event.newState);
+                    return true;
                 }
-                /**
-                 * name[0] or name[0][0] is the function to invoke (if a context is given)
-                 * call the function in the context or call it directly with the params
-                 * and return an indicator weather to set next state or not
-                 * @returns {Boolean}
-                 */
-                function _invoke() {
-                    try {
-                        (name[0][0] || name[0]).apply(name[0][1], params);
-                        return true;
-                    }
-                    catch(ex) {}
-                    return false;
-                }
-                /**
-                 * The next state is the new state and the new state is returned
-                 * @returns {Object}
-                 */
-                function _updateState() {
-                    current = name[1] || current;
-                    return current;
-                }
-                // Save [action, nextState] in name for further use
-                // If name is defined
-                // name[0] or name[0][0] is the function to invoke (if a context is given)
-                // call the function in the context or call it directly with the params
-                // The next state is the new state and the new state is returned
-                return (_assign() &&
-                        _invoke() &&
-                        _updateState());
+
+                return false;
             }
         };
     }

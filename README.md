@@ -18,20 +18,27 @@ function allow() {
     // Do Something
 }
 var sm = new Machineto("off", {
-    "off": {
-        "setCode": [allow],
-        "turnOn": [on, "on"]
-    },
-    "on": {
-        "setCode": [allow],
-        "turnOff": [off, "off"]
-    }
+  "off": {
+      "setCode": { action: allow },
+      "turnOn": { action: on, newState: "on" }
+  },
+  "on": {
+      "setCode": { action: allow },
+      "turnOff": { action: off, newState: "off" }
+  }
 });
 
-sm.event("setCode", "#1234"); // invokes allow("#1234") and returns "off" (current state)
-sm.event("turnOn", "now!");   // invokes on("now!") and returns "on" (current state)
-sm.event("setCode", "1234#"); // invokes allow("1234#") and returns "on" (current state)
-sm.event("setCode", "#");     // invokes allow("#") and returns "on" (current state)
-sm.event("turnOff", "bye!");  // invokes off("bye!") and returns "off" (current state)
+sm.fire("setCode", "#1234"); // invokes allow("#1234") and returns true
+sm.getCurrentState();        // returns "off" (current state)
+sm.fire("turnOn", "now!");   // invokes on("now!") and returns true
+sm.getCurrentState();        // returns "on" (current state)
+sm.fire("turnOn", "check!")  // return false (no action was called)
+sm.getCurrentState();        // returns "on" (current state)
+sm.fire("setCode", "1234#"); // invokes allow("1234#") and returns true
+sm.getCurrentState();        // returns "on" (current state)
+sm.fire("setCode", "#");     // invokes allow("#") and returns true
+sm.getCurrentState();        // returns "on" (current state)
+sm.fire("turnOff", "bye!");  // invokes off("bye!") and returns true
+sm.getCurrentState();        // returns "off" (current state)
 
 ```
