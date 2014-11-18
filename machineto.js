@@ -40,29 +40,35 @@
                 /**
                  * name[0] or name[0][0] is the function to invoke (if a context is given)
                  * call the function in the context or call it directly with the params
-                 * @returns
+                 * and return an indicator weather to set next state or not
+                 * @returns {Boolean}
                  */
                 function _invoke() {
-                    return (name[0][0] || name[0]).call(name[0][1], params);
+                    try {
+                        (name[0][0] || name[0]).call(name[0][1], params);
+                        return true;
+                    }
+                    catch(ex) {}
+
+                    return false;
                 }
                 /**
                  * The next state is the new state and the new state is returned
                  * @returns {Object}
                  */
-                function _setCurrent() {
+                function _updateState() {
                     current = name[1] || current;
 
                     return current;
                 }
-
                 // Save [action, nextState] in name for further use
                 // If name is defined
                 // name[0] or name[0][0] is the function to invoke (if a context is given)
                 // call the function in the context or call it directly with the params
                 // The next state is the new state and the new state is returned
-                return ((_assign()) &&
-                        (_invoke(),
-                         _setCurrent()));
+                return (_assign() &&
+                        _invoke() &&
+                        _updateState());
             }
         };
     }
