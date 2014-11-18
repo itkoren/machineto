@@ -33,12 +33,14 @@
                  * @returns {Array}
                  */
                 function _assign() {
-                    return (name = machine[current][name]);
+                    name = machine[current][name];
+
+                    return name;
                 }
                 /**
                  * name[0] or name[0][0] is the function to invoke (if a context is given)
                  * call the function in the context or call it directly with the params
-                 * @returns {Array}
+                 * @returns
                  */
                 function _invoke() {
                     return (name[0][0] || name[0]).call(name[0][1], params);
