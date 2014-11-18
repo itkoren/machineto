@@ -35,7 +35,6 @@
                  */
                 function _assign() {
                     name = machine[current][name];
-
                     return name;
                 }
                 /**
@@ -45,13 +44,11 @@
                  * @returns {Boolean}
                  */
                 function _invoke() {
-
                     try {
                         (name[0][0] || name[0]).apply(name[0][1], params);
                         return true;
                     }
                     catch(ex) {}
-
                     return false;
                 }
                 /**
@@ -60,7 +57,6 @@
                  */
                 function _updateState() {
                     current = name[1] || current;
-
                     return current;
                 }
                 // Save [action, nextState] in name for further use
