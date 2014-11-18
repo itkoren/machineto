@@ -77,7 +77,7 @@ sm.fire("setCode", "#1234"); // invokes allow("#1234") and returns true
 sm.getCurrentState();        // returns "off" (current state)
 sm.fire("turnOn", "now!");   // invokes on("now!") and returns true
 sm.getCurrentState();        // returns "on" (current state)
-sm.fire("turnOn", "check!")  // return false (no action was called)
+sm.fire("turnOn", "check!")  // returns false (no action was called)
 sm.getCurrentState();        // returns "on" (current state)
 sm.fire("setCode", "1234#"); // invokes allow("1234#") and returns true
 sm.getCurrentState();        // returns "on" (current state)
