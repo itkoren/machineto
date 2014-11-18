@@ -1,8 +1,8 @@
 {
   "name": "machineto",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Minimal (neto) implementation of a finite state machine in javascript",
-  "private": true,
+  "private": false,
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha ./tests"
   },
