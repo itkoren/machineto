@@ -25,7 +25,7 @@
         /**
          * Initialize the current state and the state machine
          * @param {String} state - the current state
-         * @param {Object} transitionData - the object representation of the transitions diagram
+         * @param {Object} diagram - the object representation of the transitions diagram
          * @returns {Object}
          */
         function _initialize(state, diagram) {
