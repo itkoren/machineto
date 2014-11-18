@@ -29,24 +29,38 @@
              */
             event: function (name, params) {
                 /**
+                 * Save [action, nextState] in name for further use and return name
+                 * @returns {Array}
+                 */
+                function _assign() {
+                    return (name = machine[current][name]);
+                }
+                /**
+                 * name[0] or name[0][0] is the function to invoke (if a context is given)
+                 * call the function in the context or call it directly with the params
+                 * @returns {Array}
+                 */
+                function _invoke() {
+                    return (name[0][0] || name[0]).call(name[0][1], params);
+                }
+                /**
                  * The next state is the new state and the new state is returned
-                 * @param {String} name - the name of the event
-                 * @param {Object} params - the parameters to pass to the action
                  * @returns {Object}
                  */
-                function _setCurrent(state) {
-                    current = state || current;
+                function _setCurrent() {
+                    current = name[1] || current;
 
                     return current;
                 }
 
                 // Save [action, nextState] in name for further use
                 // If name is defined
-                // name[0] or name[0][0] is the function (if a context is given)
+                // name[0] or name[0][0] is the function to invoke (if a context is given)
                 // call the function in the context or call it directly with the params
                 // The next state is the new state and the new state is returned
-                return ((name = machine[current][name]) &&
-                        ((name[0][0] || name[0]).call(name[0][1], params), _setCurrent(name[1])));
+                return ((_assign()) &&
+                        (_invoke(),
+                         _setCurrent()));
             }
         };
     }
