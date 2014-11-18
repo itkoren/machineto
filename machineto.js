@@ -27,7 +27,8 @@
              * @param {Object} params - the parameters to pass to the action
              * @returns {Object}
              */
-            event: function (name, params) {
+            event: function (name) {
+                var params = (1 < arguments.length) ? Array.prototype.slice.call(arguments, 1) : void 0;
                 /**
                  * Save [action, nextState] in name for further use and return name
                  * @returns {Array}
@@ -44,8 +45,9 @@
                  * @returns {Boolean}
                  */
                 function _invoke() {
+
                     try {
-                        (name[0][0] || name[0]).call(name[0][1], params);
+                        (name[0][0] || name[0]).apply(name[0][1], params);
                         return true;
                     }
                     catch(ex) {}
