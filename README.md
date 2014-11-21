@@ -63,7 +63,7 @@ define(["machineto"], function (machineto) {
 });
 ```
 
-## WebWorker
+## Web Worker
 __state-machine.js__
 ```js
 importScripts("path/to/machineto.js");
