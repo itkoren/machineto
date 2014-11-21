@@ -36,6 +36,21 @@
         }
 
         /**
+         * Internal empty function
+         */
+        function empty() {}
+
+        /**
+         * Internal logging function which use the console
+         * @param {String} msg - the message to log
+         */
+        function log(msg) {
+            if (console) {
+                console.log(msg);
+            }
+        }
+
+        /**
          * Internal logger factory
          * @param {Object}/{Boolean} logger - the logger interface to use
          *        or a boolean flag which represents whether to use the console for logging
@@ -48,19 +63,15 @@
             }
             // Check if not to use console
             else if (true !== logger) {
-                function empty() {};
                 return {
                     log: empty
                 };
             }
             // Use console
             else {
-                function log(msg) {
-                    console && console.log(msg);
-                }
                 return {
                     log: log
-                }
+                };
             }
         }
 
@@ -143,12 +154,8 @@
         };
     }
 
-    // NodeJS
-    if ("undefined" !== typeof module && module.exports) {
-        module.exports = Machineto;
-    }
     // AMD / RequireJS
-    else if ("undefined" !== typeof define && define.amd) {
+    if ("undefined" !== typeof define && define.amd) {
         define([], function() {
             return Machineto;
         });
@@ -156,6 +163,10 @@
     // WebWorkers
     else if ("undefined" !== typeof self) {
         self.Machineto = Machineto;
+    }
+    // NodeJS
+    else if ("undefined" !== typeof module && module.exports) {
+        module.exports = Machineto;
     }
     // Included directly via <script> tag
     else {

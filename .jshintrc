@@ -1,0 +1,37 @@
+{
+  "curly":   true,
+  "eqeqeq":  true,
+  "immed":   true,
+  "latedef": false,
+  "newcap":  true,
+  "noarg":   true,
+  "sub":     true,
+  "undef":   true,
+  "boss":    true,
+  "eqnull":  true,
+  "browser": true,
+
+  "globals": {
+    // AMD
+    "module":     true,
+    "define":     true,
+    "require":    true,
+
+    // Environments
+    "console":    true,
+    "__dirname":  true,
+
+    // General Purpose Libraries
+    "self":       true,
+
+    // Testing
+    "sinon":      true,
+    "describe":   true,
+    "it":         true,
+    "expect":     true,
+    "beforeEach": true,
+    "afterEach":  true,
+    "before":     true,
+    "after":      true
+  }
+}
