@@ -28,7 +28,7 @@ sm.fire("event");
 ```js
 <script type="text/javascript" src="path/to/machineto.js"></script>
 ```
-```js
+```html
 <script type="text/javascript">
     function action() {
         // Do Something
@@ -64,7 +64,7 @@ define(["machineto"], function (machineto) {
 ```
 
 ## WebWorker
-state-machine.js
+__state-machine.js__
 ```js
 importScripts("path/to/machineto.js");
 function action() {
@@ -79,14 +79,15 @@ var sm = new Machineto("state1", {
 onmessage = function (event) {
     if (event.data.request && event.data.request.name) {
         postMessage({
-            "response": sm[event.data.request.name] && sm[event.data.request.name].apply(this, event.data.request.params)
+            "response": sm[event.data.request.name] &&
+                        sm[event.data.request.name].apply(this, event.data.request.params)
         });
     }
 };
 ```
 
-example.html
-```js
+__example.html__
+```html
 <script type="text/javascript">
     var worker = new Worker("path/to/state-machine.js");
 
