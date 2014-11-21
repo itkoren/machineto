@@ -77,7 +77,8 @@ var sm = new Machineto("state1", {
     "logger": true
 });
 onmessage = function (event) {
-    if (event.data.request && event.data.request.name) {
+    if (event.data.request &&
+        event.data.request.name) {
         postMessage({
             "response": sm[event.data.request.name] &&
                         sm[event.data.request.name].apply(this, event.data.request.params)
@@ -89,22 +90,22 @@ onmessage = function (event) {
 __example.html__
 ```html
 <script type="text/javascript">
-    var worker = new Worker("path/to/state-machine.js");
+    var workerSM = new Worker("path/to/state-machine.js");
 
-    worker.onmessage = function (event) {
-        console.log("Worker said : " + JSON.stringify(event.data));
+    workerSM.onmessage = function (event) {
+        console.log("State Machine Worker said: " + JSON.stringify(event.data));
     };
 
-    worker.postMessage({ request: {
+    workerSM.postMessage({ request: {
         "name": "getCurrentState"
     }});
-    worker.postMessage({ request: {
+    workerSM.postMessage({ request: {
         "name": "fire",
         "params": [
                 "event"
         ]
     }});
-    worker.postMessage({ request: {
+    workerSM.postMessage({ request: {
         "name": "getCurrentState"
     }});
 </script>
