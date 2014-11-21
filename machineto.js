@@ -102,6 +102,10 @@
             return Machineto;
         });
     }
+    // WebWorkers
+    else if ("undefined" !== typeof self) {
+        self.Machineto = Machineto;
+    }
     // Included directly via <script> tag
     else {
         root.Machineto = Machineto;
