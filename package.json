@@ -1,6 +1,6 @@
 {
   "name": "machineto",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Minimal (neto) implementation of a finite state machine in javascript",
   "private": false,
   "scripts": {
@@ -13,6 +13,24 @@
     "sinon":"1.12.x"
   },
   "author": "Itai Koren (@itkoren)",
+  "contributors": [
+    "Michaeld (@miki2826)"
+  ],
+  "main": "./machineto.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itkoren/machineto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itkoren/machinet/issues"
+  },
+  "keywords": [
+    "state machine",
+    "finite state machine",
+    "state",
+    "FSM",
+    "states"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">= 0.10.x"
