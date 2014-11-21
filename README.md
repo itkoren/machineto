@@ -26,7 +26,7 @@ sm.fire("event");
 
 ## Browser
 ```html
-<script type="text/javascript" src="path/to/machineto.js"></script>
+<script type="text/javascript" src="path/to/machineto.min.js"></script>
 ```
 ```html
 <script type="text/javascript">
@@ -66,7 +66,7 @@ define(["machineto"], function (machineto) {
 ## Web Worker
 __state-machine.js__
 ```js
-importScripts("path/to/machineto.js");
+importScripts("path/to/machineto.min.js");
 function action() {
     // Do Something
 }
