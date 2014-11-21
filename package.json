@@ -12,11 +12,12 @@
     "chai":"1.10.x",
     "sinon":"1.12.x"
   },
-  "author": "Itai Koren (@itkoren)",
+  "author": "Itai Koren (@itkoren) <itkoren@gmail.com>",
   "contributors": [
-    "Michaeld (@miki2826)"
+    "Michaeld (@miki2826) <miki2826@gmail.com>"
   ],
   "main": "./machineto.js",
+  "homepage": "https://github.com/itkoren/machineto",
   "repository": {
     "type": "git",
     "url": "https://github.com/itkoren/machineto.git"

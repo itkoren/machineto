@@ -11,18 +11,57 @@
  *                  "event3": { action: action3, context: context, nextState: "state1" }
  *              }
  *         }
+ * @param {Object} options - additional options (only logger for now):
+ *         {
+ *              "logger": logger || true // If no logger is supplied, I can use the console.log, this can be controlled by setting "logger" to true/false
+ *         }
  * @returns {Object}
  */
 (function() {
     var root = this;
 
-    function Machineto(initialState, transitions) {
+    function Machineto(initialState, transitions, options) {
+        options = options || {};
+
         var currentState;
         var transitionDiagram;
+        var logger = _getLogger(options.logger);
 
         if ("string" === typeof initialState && "object" === typeof transitions) {
+            logger.log("[INITIALIZING]: Got needed initialization data");
             currentState = initialState;
+            logger.log("[INITIALIZING]: currentState = " + currentState);
             transitionDiagram = transitions;
+            logger.log("[INITIALIZING]: transitionDiagram = " + JSON.stringify(transitionDiagram));
+        }
+
+        /**
+         * Internal logger factory
+         * @param {Object}/{Boolean} logger - the logger interface to use
+         *        or a boolean flag which represents whether to use console for logging
+         * @returns {Object}
+         */
+        function _getLogger(logger) {
+            // Check if got a logger interface
+            if ("object" === typeof logger && "function" === typeof logger.log) {
+                return logger;
+            }
+            // Check if not to use console
+            else if (true !== logger) {
+                function empty() {};
+                return {
+                    log: empty
+                };
+            }
+            // Use console
+            else {
+                function log(msg) {
+                    console && console.log(msg);
+                }
+                return {
+                    log: log
+                }
+            }
         }
 
         /**
@@ -31,6 +70,7 @@
          * @returns {Object}
          */
         function _lookup(eventName) {
+            logger.log("[LOOKUP]: currentState = " + currentState + ", eventName = " + eventName);
             return transitionDiagram[currentState][eventName];
         }
         /**
@@ -42,11 +82,15 @@
          * @returns {Boolean}
          */
         function _invoke(event, params) {
+            logger.log("[ACTION]: params = " + JSON.stringify(params));
             try {
                 event.action.apply(event.context, params);
+                logger.log("ACTION: SUCCESS");
                 return true;
             }
-            catch(ex) {}
+            catch(ex) {
+                logger.log("ACTION: ERROR = " + JSON.stringify(ex));
+            }
             return false;
         }
         /**
@@ -55,6 +99,7 @@
          * @returns {Object}
          */
         function _updateState(nextState) {
+            logger.log("[UPDATE]: nextState = " + nextState);
             currentState = nextState || currentState;
         }
         /**
@@ -62,6 +107,7 @@
          * @returns {String}
          */
         function getCurrentState() {
+            logger.log("[GET {getCurrentState}]: currentState = " + currentState);
             return currentState;
         }
         /**
@@ -71,6 +117,8 @@
          * @returns {Object}
          */
         function fire(eventName) {
+            logger.log("[FIRE {fire}]: eventName = " + eventName);
+
             // Lookup for the event for further use
             var event = _lookup(eventName);
             var params = (1 < arguments.length) ? Array.prototype.slice.call(arguments, 1) : void 0;
@@ -79,9 +127,12 @@
             if (event && _invoke(event, params)) {
                 // Update the current state to the next state
                 _updateState(event.nextState);
+
+                logger.log("[FIRE {fire}]: FIRED");
                 return true;
             }
 
+            logger.log("[FIRE {fire}]: NOT FIRED");
             return false;
         }
 
