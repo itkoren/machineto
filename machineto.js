@@ -13,7 +13,7 @@
  *         }
  * @param {Object} options - additional options (only logger for now):
  *         {
- *              "logger": logger || true // If no logger is supplied, I can use the console.log, this can be controlled by setting "logger" to true/false
+ *              "logger": logger || true // logger should implement a "log" method. If no logger is supplied, I can use the console, this can be controlled by setting "logger" to true/false
  *         }
  * @returns {Object}
  */
@@ -38,7 +38,7 @@
         /**
          * Internal logger factory
          * @param {Object}/{Boolean} logger - the logger interface to use
-         *        or a boolean flag which represents whether to use console for logging
+         *        or a boolean flag which represents whether to use the console for logging
          * @returns {Object}
          */
         function _getLogger(logger) {
