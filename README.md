@@ -25,7 +25,7 @@ sm.fire("event");
 ```
 
 ## Browser
-```js
+```html
 <script type="text/javascript" src="path/to/machineto.js"></script>
 ```
 ```html
