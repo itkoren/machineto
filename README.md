@@ -11,6 +11,9 @@ States can be defined, transitions to these states can be performed and paramete
 npm install machineto
 ```
 ```js
+function action() {
+    // Do Something
+}
 var machineto = require("machineto");
 var sm = new machineto("state1", {
     "state1": { "event": { action: action, nextState: "state2" } },
@@ -27,6 +30,9 @@ sm.fire("event");
 ```
 ```js
 <script type="text/javascript">
+    function action() {
+        // Do Something
+    }
     var sm = new Machineto("state1", {
         "state1": { "event": { action: action, nextState: "state2" } },
         "state2": { "event": { action: action } }
@@ -45,12 +51,62 @@ require.config({
 ```
 ```js
 define(["machineto"], function (machineto) {
+    function action() {
+        // Do Something
+    }
+
     var sm = new machineto("state1", {
         "state1": { "event": { action: action, nextState: "state2" } },
         "state2": { "event": { action: action } }
     });
     sm.fire("event");
 });
+```
+
+## WebWorker
+state-machine.js
+```js
+importScripts("path/to/machineto.js");
+function action() {
+    // Do Something
+}
+var sm = new Machineto("state1", {
+    "state1": { "event": { action: action, nextState: "state2" } },
+    "state2": { "event": { action: action } }
+}, {
+    "logger": true
+});
+onmessage = function (event) {
+    if (event.data.request && event.data.request.name) {
+        postMessage({
+            "response": sm[event.data.request.name] && sm[event.data.request.name].apply(this, event.data.request.params)
+        });
+    }
+};
+```
+
+example.html
+```js
+<script type="text/javascript">
+    var worker = new Worker("path/to/state-machine.js");
+
+    worker.onmessage = function (event) {
+        console.log("Worker said : " + JSON.stringify(event.data));
+    };
+
+    worker.postMessage({ request: {
+        "name": "getCurrentState"
+    }});
+    worker.postMessage({ request: {
+        "name": "fire",
+        "params": [
+                "event"
+        ]
+    }});
+    worker.postMessage({ request: {
+        "name": "getCurrentState"
+    }});
+</script>
 ```
 
 ## A Quick Example
