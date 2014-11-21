@@ -61,5 +61,5 @@ ACTION: SUCCESS
 [2K[0G    [32m  ✓[0m[90m 'off' should have been called once with 'bye!' and current state should be 'off' [0m
 
 
-[92m [0m[32m 18 passing[0m[90m (24ms)[0m
+[92m [0m[32m 18 passing[0m[90m (23ms)[0m
 
