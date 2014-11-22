@@ -61,7 +61,7 @@ module.exports = function (grunt) {
                     // NNB. As mocha is 'clever' enough to only run the tests once for
                     // each file the following coverage task does not actually run any
                     // tests which is why the coverage instrumentation has to be done here
-                    "require": "coverage/blanket"
+                    "require": "./coverage/blanket"
                 },
                 "src": ["./test/*.js"]
             },
@@ -72,7 +72,7 @@ module.exports = function (grunt) {
                     "quiet": true,
                     // specify a destination file to capture the mocha
                     // output (the quiet option does not suppress this)
-                    "captureFile": "coverage/coverage.html"
+                    "captureFile": "./coverage/coverage.html"
                 },
                 "src": ["./test/*.js"]
             },
@@ -103,7 +103,7 @@ module.exports = function (grunt) {
         "string-replace": {
             "uglify": {
                 "files": {
-                    "dist/<%= pkg.name %>.js": "dist/<%= pkg.name %>.js"
+                    "./dist/<%= pkg.name %>.js": "./dist/<%= pkg.name %>.js"
                 },
                 "options": {
                     "replacements": [{
@@ -114,7 +114,7 @@ module.exports = function (grunt) {
             },
             "coverage": {
                 "files": {
-                    "docs/coverage.json": "coverage/results.txt"
+                    "./docs/coverage.json": "./coverage/results.txt"
                 },
                 "options": {
                     "replacements": [{
@@ -134,7 +134,7 @@ module.exports = function (grunt) {
         // Configure the changelog task
         "changelog": {
             "options": {
-                "dest": "docs/changelog.md"
+                "dest": "./docs/changelog.md"
             }
         },
 
