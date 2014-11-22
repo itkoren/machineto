@@ -1,5 +1,5 @@
 /*!
- * machineto | 0.0.13 | 2014-11-22
+ * machineto | 0.0.15 | 2014-11-22
  * https://github.com/itkoren/machineto
  *
  * Copyright (c) 2014 Itai Koren (@itkoren) <itkoren@gmail.com>, contributors

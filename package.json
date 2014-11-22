@@ -1,6 +1,6 @@
 {
   "name": "machineto",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Minimal (neto) implementation of a finite state machine in javascript",
   "private": false,
   "scripts": {

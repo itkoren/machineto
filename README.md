@@ -194,6 +194,10 @@ Copyright (c) 2014 Itai Koren (@itkoren) <itkoren@gmail.com>, contributors.
 
 
 ## Releases
+<a name="0.0.15"></a>
+#### 0.0.15 (2014-11-22)
+
+
 <a name="0.0.14"></a>
 #### 0.0.14 (2014-11-22)
 
