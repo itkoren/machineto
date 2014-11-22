@@ -2,6 +2,9 @@
 [INITIALIZING]: currentState = off
 [INITIALIZING]: transitionDiagram = {"off":{"turnOn":{"nextState":"on"}},"on":{"turnOff":{"nextState":"off"}}}
 [INITIALIZING]: Got needed initialization data
+[INITIALIZING]: currentState = off
+[INITIALIZING]: transitionDiagram = {"off":{"turnOn":{"async":true,"nextState":"on"}},"on":{"turnOff":{"nextState":"off"}}}
+[INITIALIZING]: Got needed initialization data
 [INITIALIZING]: currentState = state1
 [INITIALIZING]: transitionDiagram = {"state1":{"event":{"nextState":"state2"}},"state2":{"event":{}}}
 
@@ -22,6 +25,26 @@ ACTION: SUCCESS
 [FIRE {fire}]: FIRED
 [GET {getCurrentState}]: currentState = on
 [2K[0G    [32m  ✓[0m[90m 'on' should have been called once and current state should be 'on' [0m
+[FIRE {fire}]: eventName = turnOff
+[LOOKUP]: currentState = on, eventName = turnOff
+[ACTION]: params = undefined
+ACTION: SUCCESS
+[UPDATE]: nextState = off
+[FIRE {fire}]: FIRED
+[GET {getCurrentState}]: currentState = off
+[2K[0G    [32m  ✓[0m[90m 'off' should have been called once and current state should be 'off' [0m
+[0m    Test two states transits with an async action[0m
+[2K[0G    [32m  ✓[0m[90m 'off' and 'on' should not have been called [0m
+[FIRE {fire}]: eventName = turnOn
+[LOOKUP]: currentState = off, eventName = turnOn
+[FIRE {fire}]: async event action
+[ACTION]: params = [null]
+ACTION: SUCCESS
+[FIRE {fire}]: FIRED
+[GET {getCurrentState}]: currentState = off
+[UPDATE]: nextState = on
+[GET {getCurrentState}]: currentState = on
+[2K[0G    [32m  ✓[0m[90m 'on' should have been called once and current state should be 'on' [0m[31m(502ms)[0m
 [FIRE {fire}]: eventName = turnOff
 [LOOKUP]: currentState = on, eventName = turnOff
 [ACTION]: params = undefined
@@ -61,5 +84,5 @@ ACTION: SUCCESS
 [2K[0G    [32m  ✓[0m[90m 'off' should have been called once with 'bye!' and current state should be 'off' [0m
 
 
-[92m [0m[32m 18 passing[0m[90m (25ms)[0m
+[92m [0m[32m 21 passing[0m[90m (532ms)[0m
 

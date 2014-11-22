@@ -1,3 +1,12 @@
+<a name="0.0.16"></a>
+### 0.0.16 (2014-11-23)
+
+
+#### Features
+
+* **async:** add support for async actions ([5de84637](https://github.com/itkoren/machineto/commit/5de84637746153bd977fc47f06caa178ae421e92))
+
+
 <a name="0.0.15"></a>
 ### 0.0.15 (2014-11-22)
 
