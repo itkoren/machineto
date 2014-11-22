@@ -1,3 +1,10 @@
+/*!
+ * machineto
+ * https://github.com/itkoren/machineto
+ *
+ * Copyright (c) 2014 Itai Koren (@itkoren) <itkoren@gmail.com>, contributors
+ * Licensed under the MIT license.
+ */
 module.exports = function (grunt) {
 
     // Displays the elapsed execution time of grunt tasks
@@ -24,7 +31,7 @@ module.exports = function (grunt) {
              */
             "files": ["./src/*.js", "./test/*.js"],
             "options": {
-                "jshintrc":".jshintrc"
+                "jshintrc": ".jshintrc"
             }
         },
 
@@ -74,7 +81,8 @@ module.exports = function (grunt) {
             "travis-cov": {
                 "options": {
                     "reporter": "travis-cov",
-                    quiet: false
+                    "quiet": false,
+                    "captureFile": "./coverage/results.txt"
                 },
                 "src": ["./test/*.js"]
             }
@@ -83,7 +91,7 @@ module.exports = function (grunt) {
         // Configure the uglify task
         "uglify": {
             "options": {
-                "banner": "/*! <%= pkg.name %> | <%= pkg.version %> | <%= grunt.template.today(\"yyyy-mm-dd\") %> /\nCopyright (c) 2014 Itai Koren"
+                "banner": "/*! <%= pkg.name %> | <%= pkg.version %> | <%= grunt.template.today(\"yyyy-mm-dd\") %> | Copyright (c) 2014 Itai Koren, contributors */\n"
             },
             "dist": {
                 "src": "./dist/<%= pkg.name %>.js",
@@ -91,21 +99,115 @@ module.exports = function (grunt) {
             }
         },
 
-        // Configure version bump
-        bump: {
-            options: {
-                files: ["package.json", "bower.json"],
-                updateConfigs: ["pkg", "bower"],
-                commit: true,
-                commitMessage: "Release v%VERSION%",
-                commitFiles: ["package.json", "bower.json", "dist/*.*", "test/results.txt"],
-                createTag: true,
-                tagName: "v%VERSION%",
-                tagMessage: "Version %VERSION%",
-                push: false,
-                pushTo: "upstream",
-                gitDescribeOptions: "--tags --always --abbrev=1 --dirty=-d",
-                globalReplace: false
+        // Configure the string-replace task
+        "string-replace": {
+            "uglify": {
+                "files": {
+                    "dist/<%= pkg.name %>.js": "dist/<%= pkg.name %>.js"
+                },
+                "options": {
+                    "replacements": [{
+                        "pattern": "* <%= pkg.name %>",
+                        "replacement": "* <%= pkg.name %> | <%= pkg.version %> | <%= grunt.template.today(\"yyyy-mm-dd\") %>"
+                    }]
+                }
+            },
+            "coverage": {
+                "files": {
+                    "docs/coverage.json": "coverage/results.txt"
+                },
+                "options": {
+                    "replacements": [{
+                        "pattern": "Coverage: ",
+                        "replacement": ""
+                    }, {
+                        "pattern": "\nCoverage succeeded.",
+                        "replacement": ""
+                    }, {
+                        "pattern": /(\d{1,})%/,
+                        "replacement": "{\n\"coverage\": \"$1\"\n}"
+                    }]
+                }
+            }
+        },
+
+        // Configure the changelog task
+        "changelog": {
+            "options": {
+                "dest": "docs/changelog.md"
+            }
+        },
+
+        // Configure the verb task
+        "verb": {
+            "readme": {
+                "files": [
+                    {
+                        "src": [".verbrc.md"],
+                        "dest": "README.md"
+                    },
+                    {
+                        "expand": true,
+                        "cwd": "docs",
+                        "src": ["**/*.tmpl.md"],
+                        "dest": ".",
+                        "ext": ".md"
+                    }
+                ]
+            }
+        },
+
+        // Configure version bump task
+        "bump": {
+            "options": {
+                "files": ["package.json", "bower.json"],
+                "updateConfigs": ["pkg", "bower"],
+                "commit": true,
+                "commitMessage": "Release v%VERSION%",
+                "commitFiles": ["package.json", "bower.json", "dist/*.*", "test/results.txt", "coverage/results.txt", "docs/*.*", "README.md"],
+                "createTag": true,
+                "tagName": "v%VERSION%",
+                "tagMessage": "Version %VERSION%",
+                "push": false,
+                "pushTo": "upstream",
+                "gitDescribeOptions": "--tags --always --abbrev=1 --dirty=-d",
+                "globalReplace": false
+            }
+        },
+
+        // Configure release task
+        "release": {
+            "npm": {
+                "options": {
+                    "bump": false, //default: true
+                    "file": "package.json", //default: package.json
+                    "add": false, //default: true
+                    "commit": false, //default: true
+                    "tag": false, //default: true
+                    "push": false, //default: true
+                    "pushTags": false, //default: true
+                    "npm": true, //default: true
+                    "npmtag": true, //default: no tag
+                    "github": {
+                        "repo": "itkoren/machineto"
+                    }
+                }
+            },
+            "bower": {
+                "options": {
+                    "bump": false, //default: true
+                    "file": "bower.json", //default: package.json
+                    "add": false, //default: true
+                    "commit": false, //default: true
+                    "tag": false, //default: true
+                    "push": false, //default: true
+                    "pushTags": false, //default: true
+                    "npm": false, //default: true
+                    "npmtag": false, //default: no tag
+                    "github": {
+                        "repo": "itkoren/machineto"
+                    }
+                }
             }
         },
 
@@ -120,9 +222,24 @@ module.exports = function (grunt) {
     // Unit Testing Task
     grunt.registerTask("test", ["mochaTest"]);
 
+    // Documentation Task
+    grunt.registerTask("docs", ["changelog", "string-replace:coverage", "verb"]);
+
+    // Dist Task
+    grunt.registerTask("dist", ["copy", "uglify", "string-replace:uglify"]);
+
+    // Publish Task
+    grunt.registerTask("publish", ["release:npm", "release:bower"]);
+
     // Default Task
-    grunt.registerTask("default", ["jshint", "copy", "test"]);
+    grunt.registerTask("default", ["jshint", "test"]);
 
     // Release Task
-    grunt.registerTask("release", ["default", "uglify", "bump"]);
+    grunt.registerTask("release", ["default", "dist", "docs"]);
+
+    // Version Task
+    grunt.registerTask("version", ["bump-only:minor", "docs", "bump-commit"]);
+
+    // Deploy Task
+    grunt.registerTask("deploy", ["release", "version", "publish"]);
 };
