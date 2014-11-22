@@ -164,7 +164,7 @@ module.exports = function (grunt) {
                 "updateConfigs": ["pkg", "bower"],
                 "commit": true,
                 "commitMessage": "Release v%VERSION%",
-                "commitFiles": ["package.json", "bower.json", "dist/*.*", "test/results.txt", "coverage/results.txt", "docs/*.*", "README.md"],
+                "commitFiles": ["package.json", "bower.json", "./dist/*.*", "./test/*.*", "./coverage/*.*", "./docs/*.*", "README.md"],
                 "createTag": true,
                 "tagName": "v%VERSION%",
                 "tagMessage": "Version %VERSION%",
@@ -238,8 +238,8 @@ module.exports = function (grunt) {
     grunt.registerTask("release", ["default", "dist", "docs"]);
 
     // Version Task
-    grunt.registerTask("version", ["bump-only:minor", "docs", "bump-commit"]);
+    grunt.registerTask("version", ["default", "dist", "bump-only", "docs", "bump-commit"]);
 
     // Deploy Task
-    grunt.registerTask("deploy", ["release", "version", "publish"]);
+    grunt.registerTask("deploy", ["version", "publish"]);
 };
