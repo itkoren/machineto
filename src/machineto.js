@@ -15,7 +15,7 @@
  *                  "event2": { action: action2 }
  *              },
  *              "state2": {
- *                  "event3": { action: action3, context: context, nextState: "state1" }
+ *                  "event3": { action: action3, async: true, context: context, nextState: "state1" } // when async=true, last argument to the action is expected to be the callback
  *              }
  *         }
  * @param {Object} options - additional options (only logger for now):
@@ -101,6 +101,7 @@
          */
         function _invoke(event, params) {
             logger.log("[ACTION]: params = " + JSON.stringify(params));
+
             try {
                 event.action.apply(event.context, params);
                 logger.log("ACTION: SUCCESS");
@@ -140,14 +141,35 @@
             // Lookup for the event for further use
             var event = _lookup(eventName);
             var params = (1 < arguments.length) ? Array.prototype.slice.call(arguments, 1) : void 0;
+            var async;
 
             // Invoke the action function
-            if (event && _invoke(event, params)) {
-                // Update the current state to the next state
-                _updateState(event.nextState);
+            if (event) {
+                async = event.async && params && "function" === typeof params[params.length - 1] && params[params.length - 1];
 
-                logger.log("[FIRE {fire}]: FIRED");
-                return true;
+                if (async) {
+                    logger.log("[FIRE {fire}]: async event action");
+
+                    // Wrap the original callback so the state can be updated upon completion
+                    params[params.length - 1] = function() {
+                        var args = (1 < arguments.length) ? Array.prototype.slice.call(arguments, 1) : void 0;
+
+                        // Update the current state to the next state
+                        _updateState(event.nextState);
+
+                        async.apply(event.context, args);
+                    };
+                }
+
+                if (_invoke(event, params)) {
+                    if (!async) {
+                        // Update the current state to the next state
+                        _updateState(event.nextState);
+                    }
+
+                    logger.log("[FIRE {fire}]: FIRED");
+                    return true;
+                }
             }
 
             logger.log("[FIRE {fire}]: NOT FIRED");
