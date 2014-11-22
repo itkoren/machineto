@@ -175,6 +175,18 @@ module.exports = function (grunt) {
             }
         },
 
+        // Configure npm-publish task
+        "npm-publish": {
+            "options": {
+                // list of tasks that are required before publishing
+                "requires": [],
+                // if the workspace is dirty, abort publishing (to avoid publishing local changes)
+                "abortIfDirty": true,
+                // can also be a function that returns NPM tag (eg. to determine canary/latest tag based on the version)
+                tag: "latest"
+            }
+        },
+
         // Configure release task
         "release": {
             "npm": {
@@ -241,5 +253,5 @@ module.exports = function (grunt) {
     grunt.registerTask("version", ["default", "bump-only", "dist", "docs", "bump-commit"]);
 
     // Deploy Task
-    grunt.registerTask("deploy", ["version", "publish"]);
+    grunt.registerTask("deploy", ["version", "npm-publish"]);
 };
