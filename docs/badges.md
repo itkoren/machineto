@@ -3,7 +3,10 @@
 [![Bower version](https://badge.fury.io/bo/machineto.svg)](http://badge.fury.io/bo/machineto.svg)
 [![dependency status](https://david-dm.org/clux/badgify.svg)](https://david-dm.org/clux/badgify.svg)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
-[![build status](http://img.shields.io/appveyor/ci/gruntjs/grunt.svg)](http://img.shields.io/appveyor/ci/gruntjs/grunt.svg)
-[![coverage status](http://img.shields.io/badge/coverage-{%= coverage %}%25-green.svg)](http://img.shields.io/badge/coverage-{%= coverage %}%25-green.svg)
+[![Build Status](https://drone.io/github.com/itkoren/machineto/status.png)](https://drone.io/github.com/itkoren/machineto/latest)
+[![coverage status](http://img.shields.io/badge/local%20coverage-{%= coverage %}%25-green.svg)](http://img.shields.io/badge/local%20coverage-{%= coverage %}%25-green.svg)
+[![coveralls status](https://img.shields.io/coveralls/itkoren/machineto.svg)](https://coveralls.io/r/itkoren/machineto?branch=master)
+[![Dependency Status](https://david-dm.org/itkoren/machineto.svg?theme=shields.io)](https://david-dm.org/itkoren/machineto)
+[![devDependency Status](https://david-dm.org/itkoren/machineto/dev-status.svg?theme=shields.io)](https://david-dm.org/itkoren/machineto#info=devDependencies)
 
 [![NPM](https://nodei.co/npm/machineto.png)](https://nodei.co/npm/machineto/)
