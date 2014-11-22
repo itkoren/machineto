@@ -238,7 +238,7 @@ module.exports = function (grunt) {
     grunt.registerTask("release", ["default", "dist", "docs"]);
 
     // Version Task
-    grunt.registerTask("version", ["default", "dist", "bump-only", "docs", "bump-commit"]);
+    grunt.registerTask("version", ["default", "bump-only", "dist", "docs", "bump-commit"]);
 
     // Deploy Task
     grunt.registerTask("deploy", ["version", "publish"]);
