@@ -45,7 +45,7 @@ module.exports = function (grunt) {
 
         // Configure a mochaTest task
         "mochaTest": {
-            "test": {
+            "spec": {
                 "options": {
                     "reporter": "spec",
                     "captureFile": "./test/results.txt", // Optionally capture the reporter output to a file
@@ -65,7 +65,7 @@ module.exports = function (grunt) {
                 },
                 "src": ["./test/*.js"]
             },
-            "coverage": {
+            "html-cov": {
                 "options": {
                     "reporter": "html-cov",
                     // use the quiet flag to suppress the mocha console output
@@ -75,6 +75,14 @@ module.exports = function (grunt) {
                     "captureFile": "./coverage/coverage.html"
                 },
                 "src": ["./test/*.js"]
+            },
+            "mocha-lcov-reporter": {
+                "options": {
+                    reporter: "mocha-lcov-reporter",
+                    quiet: true,
+                    captureFile: "./coverage/lcov.info"
+                },
+                src: ["./test/*.js"]
             },
             // The travis-cov reporter will fail the tests if the
             // coverage falls below the threshold configured in package.json
@@ -175,6 +183,16 @@ module.exports = function (grunt) {
             }
         },
 
+        // Configure coveralls task
+        "coveralls": {
+            "options": {
+                "force": true
+            },
+            "all": {
+                "src": "./coverage/lcov.info"
+            }
+        },
+
         // Configure npm-publish task
         "npm-publish": {
             "options": {
@@ -234,6 +252,9 @@ module.exports = function (grunt) {
     // Unit Testing Task
     grunt.registerTask("test", ["mochaTest"]);
 
+    // Coverage with coveralls Task
+    grunt.registerTask("coverage", ["coveralls"]);
+
     // Documentation Task
     grunt.registerTask("docs", ["changelog", "string-replace:coverage", "verb"]);
 
@@ -246,6 +267,9 @@ module.exports = function (grunt) {
     // Default Task
     grunt.registerTask("default", ["jshint", "test"]);
 
+    // CI Task
+    grunt.registerTask("ci", ["default", "coverage"]);
+
     // Release Task
     grunt.registerTask("release", ["default", "dist", "docs"]);
 
@@ -253,5 +277,5 @@ module.exports = function (grunt) {
     grunt.registerTask("version", ["default", "bump-only", "dist", "docs", "bump-commit"]);
 
     // Deploy Task
-    grunt.registerTask("deploy", ["version", "npm-publish"]);
+    grunt.registerTask("deploy", ["version", "coverage", "npm-publish"]);
 };
