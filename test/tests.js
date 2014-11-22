@@ -1,3 +1,10 @@
+/*!
+ * machineto
+ * https://github.com/itkoren/machineto
+ *
+ * Copyright (c) 2014 Itai Koren (@itkoren) <itkoren@gmail.com>, contributors
+ * Licensed under the MIT license.
+ */
 var machineto = require("../src/machineto");
 var path = require("path");
 var requirejs = require("requirejs");
