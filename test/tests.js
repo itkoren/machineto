@@ -79,6 +79,40 @@ describe("machineto Tests", function() {
             expect(off.calledOnce).to.be.true();
         });
     });
+    describe("Test two states transits with an async action", function () {
+        var async = { action: function (callback) { setTimeout(callback, 500); } };
+        var on = sandbox.spy(async, "action");
+        var off = sandbox.spy();
+        var sm = new machineto("off", {
+            // When in "off" state, and the event is "turnOn" we should execute the on action and go to "on" state.
+            "off": { "turnOn": { action: on, async: true, nextState: "on" } },
+            // Do the opposite
+            "on": { "turnOff": { action: off, nextState: "off" } }
+        }, {
+            "logger": true
+        });
+
+        it("'off' and 'on' should not have been called", function () {
+            expect(on.called).to.be.false();
+            expect(off.called).to.be.false();
+        });
+
+        it("'on' should have been called once and current state should be 'on'", function (done) {
+            var callback = sandbox.spy(function() {
+                expect(sm.getCurrentState()).to.equal("on");
+                expect(on.calledOnce).to.be.true();
+                done();
+            });
+            expect(sm.fire("turnOn", callback)).to.be.true();
+            expect(sm.getCurrentState()).to.equal("off");
+        });
+
+        it("'off' should have been called once and current state should be 'off'", function () {
+            expect(sm.fire("turnOff")).to.be.true();
+            expect(sm.getCurrentState()).to.equal("off");
+            expect(off.calledOnce).to.be.true();
+        });
+    });
     describe("Test argument passing to the action", function () {
         var action = sandbox.spy();
         var args1 = { args: 1 };
