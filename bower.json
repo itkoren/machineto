@@ -7,14 +7,16 @@
         ".gitignore",
         ".jshintignore",
         ".jshintrc",
+        ".coveralls.yml",
+        ".verbrc.md",
         "bower.json",
         "gruntfile.js",
         "package.json",
         "README.md",
-        "blanket.js",
-        "coverage.html",
-        "results.txt",
-        "tests.js"
+        "./coverage/*.*",
+        "./docs/*.*",
+        "./src/*.*",
+        "./test/*.*"
     ],
     "dependencies": {},
     "devDependencies": {
