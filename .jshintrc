@@ -18,6 +18,8 @@
     "require":    true,
 
     // Environments
+    "process":    true,
+    "global":     true,
     "console":    true,
     "__dirname":  true,
 
