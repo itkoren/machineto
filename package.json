@@ -4,16 +4,22 @@
   "description": "Minimal (neto) implementation of a finite state machine in javascript",
   "private": false,
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha ./test/*.js"
+    "test": "node ./node_modules/mocha/bin/mocha ./test/*.tests.js",
+    "testling": "./node_modules/.bin/testling"
   },
   "dependencies": {},
   "devDependencies": {
     "blanket": "1.1.x",
     "chai": "1.10.x",
+    "connect": "3.3.x",
     "grunt": "0.4.x",
-    "grunt-bump": "0.0.16",
+    "grunt-blanket": "0.0.x",
+    "grunt-browserify": "3.2.x",
+    "grunt-bump": "0.0.x",
+    "grunt-contrib-clean": "0.6.x",
     "grunt-contrib-copy": "0.7.x",
     "grunt-contrib-jshint": "0.10.x",
+    "grunt-contrib-testem": "0.5.x",
     "grunt-contrib-uglify": "0.6.x",
     "grunt-conventional-changelog": "1.1.x",
     "grunt-coveralls": "1.0.x",
@@ -23,12 +29,15 @@
     "grunt-string-replace": "1.0.x",
     "grunt-verb": "0.2.x",
     "load-grunt-tasks": "1.0.x",
-    "mocha": "2.0.x",
     "mocha-lcov-reporter": "0.0.x",
+    "phantomjs": "1.9.x",
     "requirejs": "2.1.x",
+    "serve-static": "1.7.x",
     "sinon": "1.12.x",
+    "testling": "1.7.x",
     "time-grunt": "1.0.x",
-    "travis-cov": "0.2.x"
+    "travis-cov": "0.2.x",
+    "zombie": "2.2.x"
   },
   "author": {
     "name": "Itai Koren (@itkoren) <itkoren@gmail.com>",
@@ -62,7 +71,24 @@
   },
   "config": {
     "travis-cov": {
-      "threshold": 90
+      "threshold": 98
     }
+  },
+  "testling": {
+    "browsers": [
+      "ie/6..latest",
+      "chrome/22..latest",
+      "chrome/canary",
+      "firefox/16..latest",
+      "firefox/nightly",
+      "safari/6.0..latest",
+      "opera/11.0..latest",
+      "opera/next",
+      "iphone/6",
+      "ipad/6",
+      "android-browser/latest"
+    ],
+    "harness": "mocha",
+    "files": "./test/machineto.tests.js"
   }
 }

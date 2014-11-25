@@ -9,11 +9,13 @@
 [INITIALIZING]: transitionDiagram = {"state1":{"event":{"nextState":"state2"}},"state2":{"event":{}}}
 
 [0m[0m
+[0m  AMD Tests[0m
+[0m    Test machineto with requirejs[0m
+[2K[0G    [32m  ✓[0m[90m should respond to getCurrentState method [0m
+
 [0m  machineto Tests[0m
 [0m    Test machineto API[0m
 [2K[0G    [32m  ✓[0m[90m should respond to fire method [0m
-[2K[0G    [32m  ✓[0m[90m should respond to getCurrentState method [0m
-[0m    Test machineto with requirejs[0m
 [2K[0G    [32m  ✓[0m[90m should respond to getCurrentState method [0m
 [0m    Test two states transits[0m
 [2K[0G    [32m  ✓[0m[90m 'off' and 'on' should not have been called [0m
@@ -44,7 +46,7 @@ ACTION: SUCCESS
 [GET {getCurrentState}]: currentState = off
 [UPDATE]: nextState = on
 [GET {getCurrentState}]: currentState = on
-[2K[0G    [32m  ✓[0m[90m 'on' should have been called once and current state should be 'on' [0m[31m(502ms)[0m
+[2K[0G    [32m  ✓[0m[90m 'on' should have been called once and current state should be 'on' [0m[31m(501ms)[0m
 [FIRE {fire}]: eventName = turnOff
 [LOOKUP]: currentState = on, eventName = turnOff
 [ACTION]: params = undefined
@@ -83,6 +85,35 @@ ACTION: SUCCESS
 [2K[0G    [32m  ✓[0m[90m 'allow' should have been called three times, last called with '#' and current state should be 'on' [0m
 [2K[0G    [32m  ✓[0m[90m 'off' should have been called once with 'bye!' and current state should be 'off' [0m
 
+[0m  Headless Browser Tests[0m
+[0m    Test machineto with zombie headless browser[0m
+[INITIALIZING]: Got needed initialization data
+[INITIALIZING]: Got needed initialization data
+[INITIALIZING]: currentState = state1
+[INITIALIZING]: currentState = state1
+[INITIALIZING]: transitionDiagram = {"state1":{"event":{"nextState":"state2"}},"state2":{"event":{}}}
+[INITIALIZING]: transitionDiagram = {"state1":{"event":{"nextState":"state2"}},"state2":{"event":{}}}
+[GET {getCurrentState}]: currentState = state1
+[GET {getCurrentState}]: currentState = state1
+[2K[0G    [32m  ✓[0m[90m should getCurrentState from browser, current state should be 'state1' [0m[31m(461ms)[0m
+[FIRE {fire}]: eventName = event
+[FIRE {fire}]: eventName = event
+[LOOKUP]: currentState = state1, eventName = event
+[LOOKUP]: currentState = state1, eventName = event
+[ACTION]: params = undefined
+[ACTION]: params = undefined
+action
+action
+ACTION: SUCCESS
+ACTION: SUCCESS
+[UPDATE]: nextState = state2
+[UPDATE]: nextState = state2
+[FIRE {fire}]: FIRED
+[FIRE {fire}]: FIRED
+[GET {getCurrentState}]: currentState = state2
+[GET {getCurrentState}]: currentState = state2
+[2K[0G    [32m  ✓[0m[90m should fire 'event' on the state machine and getCurrentState from browser, current state should be 'state2' [0m
 
-[92m [0m[32m 21 passing[0m[90m (532ms)[0m
+
+[92m [0m[32m 23 passing[0m[90m (1s)[0m
 

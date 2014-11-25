@@ -11,7 +11,7 @@ module.exports = function (grunt) {
     require("time-grunt")(grunt);
 
     // Load NPM Tasks
-    require("load-grunt-tasks")(grunt, ["grunt-*"]);
+    require("load-grunt-tasks")(grunt, { pattern: ["grunt-*"] });
 
     // Project configuration.
     grunt.initConfig({
@@ -29,17 +29,86 @@ module.exports = function (grunt) {
              In case there is a /release/ directory found, we don't want to lint that
              so we use the ! (bang) operator to ignore the specified directory
              */
-            "files": ["./src/*.js", "./test/*.js"],
+            "files": ["./src/*.js", "./test/*.js", "./example/*.js", "!./**/*.browserified.js"],
             "options": {
                 "jshintrc": ".jshintrc"
             }
         },
 
-        // Configure Copy src to dist
+        // Configure clean task
+        "clean": {
+            "coverage": {
+                "src": ["./coverage/data/"]
+            }
+        },
+
+        // Configure blanket task
+        "blanket": {
+            "coverage": {
+                "src": ["./src/"],
+                "dest": "./coverage/data/src/"
+            }
+        },
+
+        // Configure Copy src to dist and to coverage
         "copy": {
-            "main": {
-                "src": "./src/machineto.js",
-                "dest": "./dist/machineto.js"
+            "dist": {
+                "src": "./src/<%= pkg.name %>.js",
+                "dest": "./dist/<%= pkg.name %>.js"
+            },
+            "coverage": {
+                "src": ["./test/**", "./example/**"],
+                "dest": "coverage/data/"
+            }
+        },
+
+        "browserify": {
+            "standalone": {
+                "src": "./src/<%= pkg.name %>.js",
+                "dest": "./dist/<%= pkg.name %>.amd.js",
+                "browserifyOptions": {
+                    "standalone": "<%= pkg.name %>"
+                }
+            },
+            "require": {
+                "src": "./src/<%= pkg.name %>.js",
+                "dest": "./dist/<%= pkg.name %>.cjs.js",
+                "options": {
+                    "alias": [ "./src/<%= pkg.name %>.js:" ]
+                }
+            },
+            "tests": {
+                "files": {
+                    "./test/<%= pkg.name %>.tests.browserified.js": [ "./test/<%= pkg.name %>.tests.js" ]
+                },
+                "options": {
+                    "external": [ "./<%= pkg.name %>.js" ],
+                    // Embed source map for tests
+                    "debug": true
+                }
+            }
+        },
+
+        // Configure testem task
+        "testem": {
+            "browser": {
+                // List of files to attach
+                "src": [
+                    "./node_modules/chai/chai.js",
+                    "./lib/sinon-1.12.1.js",
+                    "./coverage/data/src/*.js",
+                    "./test/setup.js",
+                    "./test/<%= pkg.name %>.tests.js"
+                ],
+                // Options that will be passed to Testem
+                "options": {
+                    "parallel": 8,
+                    "launch_in_ci": ["Chrome"],
+                    "launch_in_dev": ["PhantomJS", "Firefox", "Safari"],
+                    "reporter": "tap",
+                    "framework": "mocha"
+                },
+                "report_file": "./coverage/report.tap"
             }
         },
 
@@ -50,7 +119,7 @@ module.exports = function (grunt) {
                     "reporter": "spec",
                     "captureFile": "./test/results.txt", // Optionally capture the reporter output to a file
                     "quiet": false, // Optionally suppress output to standard out (defaults to false)
-                    "clearRequireCache": false, // Optionally clear the require cache before running tests (defaults to false)
+                    "clearRequireCache": false//, // Optionally clear the require cache before running tests (defaults to false)
 
                     // Require blanket wrapper here to instrument other required
                     // files on the fly.
@@ -61,9 +130,9 @@ module.exports = function (grunt) {
                     // NNB. As mocha is 'clever' enough to only run the tests once for
                     // each file the following coverage task does not actually run any
                     // tests which is why the coverage instrumentation has to be done here
-                    "require": "./coverage/blanket"
+                    //"require": "./coverage/blanket"
                 },
-                "src": ["./test/*.js"]
+                "src": ["./coverage/data/test/*.tests.js"]
             },
             "html-cov": {
                 "options": {
@@ -74,7 +143,7 @@ module.exports = function (grunt) {
                     // output (the quiet option does not suppress this)
                     "captureFile": "./coverage/coverage.html"
                 },
-                "src": ["./test/*.js"]
+                "src": ["./coverage/data/test/*.tests.js"]
             },
             "mocha-lcov-reporter": {
                 "options": {
@@ -82,7 +151,7 @@ module.exports = function (grunt) {
                     quiet: true,
                     captureFile: "./coverage/lcov.info"
                 },
-                src: ["./test/*.js"]
+                src: ["./coverage/data/test/*.tests.js"]
             },
             // The travis-cov reporter will fail the tests if the
             // coverage falls below the threshold configured in package.json
@@ -92,7 +161,7 @@ module.exports = function (grunt) {
                     "quiet": false,
                     "captureFile": "./coverage/results.txt"
                 },
-                "src": ["./test/*.js"]
+                "src": ["./coverage/data/test/*.tests.js"]
             }
         },
 
@@ -102,8 +171,11 @@ module.exports = function (grunt) {
                 "banner": "/*! <%= pkg.name %> | <%= pkg.version %> | <%= grunt.template.today(\"yyyy-mm-dd\") %> | Copyright (c) 2014 Itai Koren, contributors */\n"
             },
             "dist": {
-                "src": "./dist/<%= pkg.name %>.js",
-                "dest": "./dist/<%= pkg.name %>.min.js"
+                "files": {
+                    "./dist/<%= pkg.name %>.min.js": ["<%= copy.dist.dest %>"],
+                    "./dist/<%= pkg.name %>.amd.min.js": ["<%= browserify.standalone.dest %>"],
+                    "./dist/<%= pkg.name %>.cjs.min.js": ["<%= browserify.require.dest %>"]
+                }
             }
         },
 
@@ -219,7 +291,7 @@ module.exports = function (grunt) {
                     "npm": true, //default: true
                     "npmtag": true, //default: no tag
                     "github": {
-                        "repo": "itkoren/machineto"
+                        "repo": "itkoren/<%= pkg.name %>"
                     }
                 }
             },
@@ -235,7 +307,7 @@ module.exports = function (grunt) {
                     "npm": false, //default: true
                     "npmtag": false, //default: no tag
                     "github": {
-                        "repo": "itkoren/machineto"
+                        "repo": "itkoren/<%= pkg.name %>"
                     }
                 }
             }
@@ -250,7 +322,7 @@ module.exports = function (grunt) {
     });
 
     // Unit Testing Task
-    grunt.registerTask("test", ["mochaTest"]);
+    grunt.registerTask("test", ["browserify:tests", "clean", "blanket", "copy:coverage", "testem:ci:browser", "mochaTest", "clean"]);
 
     // Coverage with coveralls Task
     grunt.registerTask("coverage", ["coveralls"]);
@@ -258,8 +330,11 @@ module.exports = function (grunt) {
     // Documentation Task
     grunt.registerTask("docs", ["changelog", "string-replace:coverage", "verb"]);
 
+    // Browserify Code Task
+    grunt.registerTask("browseri", ["browserify:standalone", "browserify:require"]);
+
     // Dist Task
-    grunt.registerTask("dist", ["copy", "uglify", "string-replace:uglify"]);
+    grunt.registerTask("dist", ["copy:dist", "browseri", "uglify", "string-replace:uglify"]);
 
     // Publish Task
     grunt.registerTask("publish", ["release:npm", "release:bower"]);

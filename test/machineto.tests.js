@@ -5,23 +5,30 @@
  * Copyright (c) 2014 Itai Koren (@itkoren) <itkoren@gmail.com>, contributors
  * Licensed under the MIT license.
  */
-var machineto = require("../src/machineto");
-var path = require("path");
-var requirejs = require("requirejs");
-var expect = require("chai").expect;
-var sinon = require("sinon");
-var sandbox = sinon.sandbox.create();
-var srcDir = path.join(__dirname, "..", "src");
+var machineto;
+var sinon;
+var sandbox;
+var server;
+var browser;
+var expect;
+var chai = chai || void 0;
+var isBrowser = isBrowser || false;
+var Machineto = Machineto || void 0;
 
-requirejs.config({
-    // Pass the top-level main.js/index.js require
-    // function to requirejs so that node modules
-    // are loaded relative to the top-level JS file.
-    nodeRequire: require,
-    paths: {
-        "machineto": srcDir + "/machineto"
+if (isBrowser) {
+    expect = chai.expect;
+
+    if ("undefined" !== typeof Machineto) {
+        machineto = Machineto || void 0;
     }
-});
+}
+else {
+    expect = require("chai").expect;
+    sinon = require("sinon");
+    machineto = require("../src/machineto");
+}
+
+sandbox = sinon.sandbox.create();
 
 describe("machineto Tests", function() {
     before(function () {
@@ -38,16 +45,6 @@ describe("machineto Tests", function() {
         });
         it("should respond to getCurrentState method", function () {
             expect(sm).itself.to.respondTo("getCurrentState");
-        });
-    });
-    describe("Test machineto with requirejs", function () {
-        it("should respond to getCurrentState method", function (done) {
-            requirejs(["machineto"],
-                function(Machineto) {
-                    var sm = new Machineto();
-                    expect(sm).itself.to.respondTo("getCurrentState");
-                    done();
-                });
         });
     });
     describe("Test two states transits", function () {

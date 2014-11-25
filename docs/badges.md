@@ -9,3 +9,4 @@
 [![devDependency Status](https://david-dm.org/itkoren/machineto/dev-status.svg?theme=shields.io)](https://david-dm.org/itkoren/machineto#info=devDependencies)
 
 [![NPM](https://nodei.co/npm/machineto.png)](https://nodei.co/npm/machineto/)
+[![browser support](https://ci.testling.com/itkoren/machineto.png)](https://ci.testling.com/itkoren/machineto)

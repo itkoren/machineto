@@ -13,27 +13,31 @@
 
   "globals": {
     // AMD
-    "module":     true,
-    "define":     true,
-    "require":    true,
+    "module":        true,
+    "define":        true,
+    "require":       true,
 
     // Environments
-    "process":    true,
-    "global":     true,
-    "console":    true,
-    "__dirname":  true,
+    "process":       true,
+    "global":        true,
+    "console":       true,
+    "__dirname":     true,
+    "importScripts": true,
+    "onmessage":     true,
+    "postMessage":   true,
 
     // General Purpose Libraries
-    "self":       true,
+    "self":          true,
+    "Machineto":     true,
 
     // Testing
-    "sinon":      true,
-    "describe":   true,
-    "it":         true,
-    "expect":     true,
-    "beforeEach": true,
-    "afterEach":  true,
-    "before":     true,
-    "after":      true
+    "sinon":         true,
+    "describe":      true,
+    "it":            true,
+    "expect":        true,
+    "beforeEach":    true,
+    "afterEach":     true,
+    "before":        true,
+    "after":         true
   }
 }

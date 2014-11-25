@@ -1,0 +1,87 @@
+ok 1 Chrome 38.0 - machineto Tests Test machineto API should respond to fire method
+    ---
+        Log: >
+            [INITIALIZING]: Got needed initialization data
+            [INITIALIZING]: currentState = off
+            [INITIALIZING]: transitionDiagram = {"off":{"turnOn":{"nextState":"on"}},"on":{"turnOff":{"nextState":"off"}}}
+            [INITIALIZING]: Got needed initialization data
+            [INITIALIZING]: currentState = off
+            [INITIALIZING]: transitionDiagram = {"off":{"turnOn":{"async":true,"nextState":"on"}},"on":{"turnOff":{"nextState":"off"}}}
+            [INITIALIZING]: Got needed initialization data
+            [INITIALIZING]: currentState = state1
+            [INITIALIZING]: transitionDiagram = {"state1":{"event":{"nextState":"state2"}},"state2":{"event":{}}}
+            [FIRE {fire}]: eventName = turnOn
+            [LOOKUP]: currentState = off, eventName = turnOn
+            [ACTION]: params = undefined
+            ACTION: SUCCESS
+            [UPDATE]: nextState = on
+            [FIRE {fire}]: FIRED
+            [GET {getCurrentState}]: currentState = on
+            [FIRE {fire}]: eventName = turnOff
+            [LOOKUP]: currentState = on, eventName = turnOff
+            [ACTION]: params = undefined
+            ACTION: SUCCESS
+            [UPDATE]: nextState = off
+            [FIRE {fire}]: FIRED
+            [GET {getCurrentState}]: currentState = off
+            [FIRE {fire}]: eventName = turnOn
+            [LOOKUP]: currentState = off, eventName = turnOn
+            [FIRE {fire}]: async event action
+            [ACTION]: params = [null]
+            ACTION: SUCCESS
+            [FIRE {fire}]: FIRED
+            [GET {getCurrentState}]: currentState = off
+    ...
+ok 2 Chrome 38.0 - machineto Tests Test machineto API should respond to getCurrentState method
+ok 3 Chrome 38.0 - machineto Tests Test two states transits 'off' and 'on' should not have been called
+ok 4 Chrome 38.0 - machineto Tests Test two states transits 'on' should have been called once and current state should be 'on'
+ok 5 Chrome 38.0 - machineto Tests Test two states transits 'off' should have been called once and current state should be 'off'
+ok 6 Chrome 38.0 - machineto Tests Test two states transits with an async action 'off' and 'on' should not have been called
+ok 7 Chrome 38.0 - machineto Tests Test two states transits with an async action 'on' should have been called once and current state should be 'on'
+    ---
+        Log: >
+            [UPDATE]: nextState = on
+            [GET {getCurrentState}]: currentState = on
+    ...
+ok 8 Chrome 38.0 - machineto Tests Test two states transits with an async action 'off' should have been called once and current state should be 'off'
+    ---
+        Log: >
+            [FIRE {fire}]: eventName = turnOff
+            [LOOKUP]: currentState = on, eventName = turnOff
+            [ACTION]: params = undefined
+            ACTION: SUCCESS
+            [UPDATE]: nextState = off
+            [FIRE {fire}]: FIRED
+            [GET {getCurrentState}]: currentState = off
+            [FIRE {fire}]: eventName = event
+            [LOOKUP]: currentState = state1, eventName = event
+            [ACTION]: params = [{"args":1}]
+            ACTION: SUCCESS
+            [UPDATE]: nextState = state2
+            [FIRE {fire}]: FIRED
+            [FIRE {fire}]: eventName = event
+            [LOOKUP]: currentState = state2, eventName = event
+            [ACTION]: params = [{"args":2}]
+            ACTION: SUCCESS
+            [UPDATE]: nextState = undefined
+            [FIRE {fire}]: FIRED
+    ...
+ok 9 Chrome 38.0 - machineto Tests Test argument passing to the action should call action with 'args1'
+ok 10 Chrome 38.0 - machineto Tests Test argument passing to the action should call action with 'args2'
+ok 11 Chrome 38.0 - machineto Tests Test the action is triggered in the supplied context should call action with context
+ok 12 Chrome 38.0 - machineto Tests Test wrong event in state should not move state with 'wrong' event
+ok 13 Chrome 38.0 - machineto Tests Test exception in event action should not move state when there was an exception in event action
+ok 14 Chrome 38.0 - machineto Tests Test multiple states transits 'off', 'on' and 'allow' should not have been called
+ok 15 Chrome 38.0 - machineto Tests Test multiple states transits 'allow' should have been called once with '#1234' and current state should be 'off'
+ok 16 Chrome 38.0 - machineto Tests Test multiple states transits 'on' should have been called once with 'now!' and current state should be 'on'
+ok 17 Chrome 38.0 - machineto Tests Test multiple states transits no action should be called and current state should stay 'on'
+ok 18 Chrome 38.0 - machineto Tests Test multiple states transits 'allow' should have been called twice, last called with '1234#' and current state should be 'on'
+ok 19 Chrome 38.0 - machineto Tests Test multiple states transits 'allow' should have been called three times, last called with '#' and current state should be 'on'
+ok 20 Chrome 38.0 - machineto Tests Test multiple states transits 'off' should have been called once with 'bye!' and current state should be 'off'
+
+1..20
+# tests 20
+# pass  20
+# fail  0
+
+# ok
