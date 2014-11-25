@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>machineto WebWorker Example</title>
+</head>
+<body>
+<script type="text/javascript">
+    var API = {
+        GET_STATE: "getCurrentState",
+        FIRE: "fire"
+    };
+
+    var worker = new Worker("./webworker.js");
+    worker.onmessage = parseResponse;
+
+    var currentState;
+    var actionName;
+    var actionResult;
+
+    function validAPI(api) {
+        for (var method in API) {
+            if (API.hasOwnProperty(method) && API[method] === api) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function invokeAPI(api, params) {
+        if (validAPI(api)) {
+            worker.postMessage({
+                request: {
+                    "name": api,
+                    "params": params
+                }
+            });
+        }
+    }
+
+    function parseResponse(event) {
+        if (event                    &&
+            event.data               &&
+            event.data.response      &&
+            event.data.response.name &&
+            validAPI(event.data.response.name)) {
+
+            switch(event.data.response.name) {
+                case API.GET_STATE:
+                    currentState.innerHTML = event.data.response.value;
+                    break;
+                case API.FIRE:
+                    actionResult.innerHTML = ", Result = " + event.data.response.value;
+                    break;
+            }
+        }
+    }
+
+    function getCurrentState() {
+        invokeAPI(API.GET_STATE);
+    }
+
+    function fire(eventName) {
+        actionName.innerHTML = "Name = " + eventName;
+        invokeAPI(API.FIRE, eventName);
+    }
+
+    function init() {
+        if (document.body) {
+            currentState = document.getElementById("currentState");
+            actionName = document.getElementById("actionName");
+            actionResult = document.getElementById("actionResult");
+        }
+
+        if (!currentState) {
+            setTimeout(init, 100);
+        }
+    }
+
+    init();
+</script>
+</body>
+<div>Current State: <span id="currentState"></span></div>
+<div>Current Action Result: <span id="actionName"></span><span id="actionResult"></span></div>
+<input id="getStateButton" type="submit" value="Get Current State" onclick="getCurrentState();">
+<input id=״fireButton" type="submit" value="Fire Event" onclick="fire(['event']);">
+</html>

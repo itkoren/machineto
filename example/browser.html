@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>machineto Browser Example</title>
+    <script type="text/javascript" src="../src/machineto.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    var API = {
+        GET_STATE: "getCurrentState",
+        FIRE: "fire"
+    };
+
+    var sm;
+    var currentState;
+    var actionName;
+    var actionResult;
+
+    function action() {
+        console.log("action");
+    }
+
+    function validAPI(api) {
+        for (var method in API) {
+            if (API.hasOwnProperty(method) && API[method] === api) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function invokeAPI(api, params) {
+        if (validAPI(api)) {
+            return sm[api].apply(this, params);
+        }
+    }
+
+    function getCurrentState() {
+        currentState.innerHTML = invokeAPI(API.GET_STATE);
+    }
+
+    function fire(eventName) {
+        actionName.innerHTML = "Name = " + eventName;
+        actionResult.innerHTML = ", Result = " + invokeAPI(API.FIRE, eventName);
+    }
+
+    function init() {
+        if (document.body) {
+            currentState = document.getElementById("currentState");
+            actionName = document.getElementById("actionName");
+            actionResult = document.getElementById("actionResult");
+        }
+
+        if (!currentState) {
+            setTimeout(init, 100);
+        }
+        else {
+            sm = new Machineto("state1", {
+                "state1": { "event": { action: action, nextState: "state2" } },
+                "state2": { "event": { action: action } }
+            }, {
+                "logger": true
+            });
+        }
+    }
+
+    init();
+</script>
+</body>
+<div>Current State: <span id="currentState"></span></div>
+<div>Current Action Result: <span id="actionName"></span><span id="actionResult"></span></div>
+<input id="getStateButton" type="submit" value="Get Current State" onclick="getCurrentState();">
+<input id=״fireButton" type="submit" value="Fire Event" onclick="fire(['event']);">
+</html>
