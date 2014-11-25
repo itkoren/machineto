@@ -25,7 +25,8 @@
  * @returns {Object}
  */
 (function() {
-    var root = this;
+    // self will exist inside a WebWorker, otherwise, use this
+    var root = "undefined" !== typeof self ? self : this;
 
     function Machineto(initialState, transitions, options) {
         options = options || {};
@@ -59,7 +60,7 @@
 
         /**
          * Internal logger factory
-         * @param {Object}/{Boolean} logger - the logger interface to use
+         * @param {Object}|{Boolean} logger - the logger interface to use
          *        or a boolean flag which represents whether to use the console for logging
          * @returns {Object}
          */
@@ -189,15 +190,11 @@
             return Machineto;
         });
     }
-    // WebWorkers
-    else if ("undefined" !== typeof self) {
-        self.Machineto = Machineto;
-    }
     // NodeJS
     else if ("undefined" !== typeof module && module.exports) {
         module.exports = Machineto;
     }
-    // Included directly via <script> tag
+    // Included directly via <script> tag or inside a WebWorker
     else {
         root.Machineto = Machineto;
     }
