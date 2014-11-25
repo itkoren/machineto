@@ -95,7 +95,7 @@ ACTION: SUCCESS
 [INITIALIZING]: transitionDiagram = {"state1":{"event":{"nextState":"state2"}},"state2":{"event":{}}}
 [GET {getCurrentState}]: currentState = state1
 [GET {getCurrentState}]: currentState = state1
-[2K[0G    [32m  ✓[0m[90m should getCurrentState from browser, current state should be 'state1' [0m[31m(461ms)[0m
+[2K[0G    [32m  ✓[0m[90m should getCurrentState from browser, current state should be 'state1' [0m[31m(106ms)[0m
 [FIRE {fire}]: eventName = event
 [FIRE {fire}]: eventName = event
 [LOOKUP]: currentState = state1, eventName = event
@@ -115,5 +115,5 @@ ACTION: SUCCESS
 [2K[0G    [32m  ✓[0m[90m should fire 'event' on the state machine and getCurrentState from browser, current state should be 'state2' [0m
 
 
-[92m [0m[32m 23 passing[0m[90m (1s)[0m
+[92m [0m[32m 23 passing[0m[90m (644ms)[0m
 

@@ -61,7 +61,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 
         /**
          * Internal logger factory
-         * @param {Object}/{Boolean} logger - the logger interface to use
+         * @param {Object}|{Boolean} logger - the logger interface to use
          *        or a boolean flag which represents whether to use the console for logging
          * @returns {Object}
          */

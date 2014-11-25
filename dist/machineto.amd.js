@@ -61,7 +61,7 @@
 
         /**
          * Internal logger factory
-         * @param {Object}/{Boolean} logger - the logger interface to use
+         * @param {Object}|{Boolean} logger - the logger interface to use
          *        or a boolean flag which represents whether to use the console for logging
          * @returns {Object}
          */
