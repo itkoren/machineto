@@ -14,11 +14,17 @@
         "package.json",
         "README.md",
         "coverage/*.*",
+        "coverage",
         "docs/*.*",
+        "docs",
         "example/*.*",
+        "example",
         "lib/*.*",
+        "lib",
         "src/*.*",
-        "test/*.*"
+        "src",
+        "test/*.*",
+        "test"
     ],
     "dependencies": {},
     "devDependencies": {
